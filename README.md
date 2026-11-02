@@ -9,6 +9,8 @@ This project demonstrates the design and deployment of a cloud-native three-tier
 ## Architecture
 
 ![Three-Tier AWS EKS Architecture](screenshots/architecture.png)
+
+
 ├── screenshots/
 │   ├── architecture.png
 │   ├── terraform.png
