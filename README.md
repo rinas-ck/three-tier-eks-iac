@@ -8,6 +8,20 @@ This project demonstrates the design and deployment of a cloud-native three-tier
 
 ## Architecture
 
+![Three-Tier AWS EKS Architecture](screenshots/architecture.png)
+├── screenshots/
+│   ├── architecture.png
+│   ├── terraform.png
+│   ├── clusterinfo.png
+│   ├── instance.png
+│   ├── vpc.png
+│   ├── loadbalancer.png
+│   ├── rds.png
+│   ├── ecr.png
+│   ├── kubernetes.png
+│   ├── infrastructure.png
+│   └── database.png
+
 The application consists of three main layers:
 
 1. **Presentation Layer:** React frontend served through Nginx and exposed using an AWS LoadBalancer.
@@ -92,6 +106,33 @@ terraform validate
 terraform plan
 terraform apply
 ```
+
+## Project Evidence
+
+### Terraform Infrastructure Provisioning
+![Terraform Apply](screenshots/terraform.png)
+
+### AWS Infrastructure
+
+| Component | Screenshot |
+|---|---|
+| Amazon EKS Cluster | ![EKS](screenshots/clusterinfo.png) |
+| EC2 Worker Nodes | ![EC2](screenshots/instance.png) |
+| VPC and Subnets | ![VPC](screenshots/vpc.png) |
+| Load Balancer | ![Load Balancer](screenshots/loadbalancer.png) |
+| Amazon RDS PostgreSQL | ![RDS](screenshots/rds.png) |
+| Amazon ECR | ![ECR](screenshots/ecr.png) |
+
+### Kubernetes and Application
+
+![Kubernetes Resources](screenshots/kubernetes.png)
+
+![Application Dashboard](screenshots/infrastructure.png)
+
+### Database Management
+
+![PostgreSQL CRUD Operations](screenshots/database.png)
+
 
 ## Security Considerations
 
