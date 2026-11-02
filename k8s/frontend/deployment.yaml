@@ -1,0 +1,58 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudops-frontend
+  namespace: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudops-frontend
+  template:
+    metadata:
+      labels:
+        app: cloudops-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: 122066462311.dkr.ecr.eu-north-1.amazonaws.com/cloudops-frontend:v4
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudops-frontend
+  namespace: frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: cloudops-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP

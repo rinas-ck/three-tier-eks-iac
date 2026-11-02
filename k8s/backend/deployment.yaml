@@ -1,0 +1,74 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudops-backend
+  namespace: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudops-backend
+  template:
+    metadata:
+      labels:
+        app: cloudops-backend
+    spec:
+      serviceAccountName: cloudops-backend
+      containers:
+        - name: backend
+          image: 122066462311.dkr.ecr.eu-north-1.amazonaws.com/cloudops-backend:v5
+          imagePullPolicy: Always
+          env:
+            - name: DB_HOST
+              value: "three-tier-postgres.c7m6oqwwouxo.eu-north-1.rds.amazonaws.com"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "cloudops"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudops-backend
+  namespace: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: cloudops-backend
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+      protocol: TCP
